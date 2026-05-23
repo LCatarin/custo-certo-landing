@@ -1,0 +1,309 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Custo Certo | Precifique com segurança</title>
+    <meta
+      name="description"
+      content="Aplicativo financeiro mobile-first para profissionais e clínicas de saúde calcularem custos, margem, preço sugerido e ponto de equilíbrio."
+    />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header class="site-header" aria-label="Topo">
+      <a class="brand" href="#inicio" aria-label="Custo Certo">
+        <span class="brand-mark" aria-hidden="true">CC</span>
+        <span>
+          <strong>Custo Certo</strong>
+          <small>Clínicas com margem clara</small>
+        </span>
+      </a>
+      <nav class="nav-links" aria-label="Navegação principal">
+        <a href="#problema">Problema</a>
+        <a href="#produto">Como funciona</a>
+        <a href="#diagnostico">Simulação</a>
+      </nav>
+      <button class="header-cta js-open-lead" type="button" data-intent="Topo - simular margem">
+        Simular margem
+      </button>
+    </header>
+
+    <main id="inicio">
+      <section class="hero" aria-labelledby="hero-title">
+        <div class="hero-media" aria-hidden="true">
+          <img class="hero-phone hero-phone-main" src="assets/app-simulacao.png" alt="" />
+          <img class="hero-phone hero-phone-back" src="assets/app-relatorios.png" alt="" />
+          <img class="hero-phone hero-phone-soft" src="assets/app-dashboard.png" alt="" />
+        </div>
+        <div class="hero-copy">
+          <p class="eyebrow">Mobile-first para profissionais da saúde</p>
+          <h1 id="hero-title">Saiba se cada atendimento realmente dá lucro.</h1>
+          <p class="hero-lead">
+            O Custo Certo mostra o custo real de consultas, procedimentos e serviços para você
+            cobrar com segurança, proteger sua margem e acompanhar o ponto de equilíbrio da clínica.
+          </p>
+          <div class="hero-actions">
+            <a class="button primary" href="#diagnostico">Calcular minha margem</a>
+            <button class="button secondary js-open-lead" type="button" data-intent="Hero - receber diagnostico">
+              Receber diagnóstico completo
+            </button>
+          </div>
+        </div>
+        <div class="hero-proof" aria-label="Resumo da pesquisa">
+          <span>Pesquisa inicial com profissionais da saúde</span>
+          <strong>80%</strong>
+          <span>sem clareza organizada sobre margem por atendimento</span>
+        </div>
+      </section>
+
+      <section class="section research-band" id="problema" aria-labelledby="problem-title">
+        <div class="section-heading">
+          <p class="eyebrow">Dor comum na rotina da clínica</p>
+          <h2 id="problem-title">Agenda cheia não garante resultado no fim do mês.</h2>
+          <p>
+            Muitos profissionais acompanham faturamento, mas ainda não enxergam com precisão quanto
+            custa manter a operação aberta, quanto sobra em cada atendimento e quando um reajuste
+            deixa de ser opcional.
+          </p>
+        </div>
+        <div class="stat-grid">
+          <article class="stat-card">
+            <strong>76%</strong>
+            <span>não sabem com clareza quantos atendimentos pagam o mês</span>
+          </article>
+          <article class="stat-card">
+            <strong>88%</strong>
+            <span>não estimam com números o impacto de uma queda de tabela</span>
+          </article>
+          <article class="stat-card">
+            <strong>80%</strong>
+            <span>nunca calcularam ou tentaram sem segurança o ganho líquido</span>
+          </article>
+        </div>
+        <div class="section-cta">
+          <button class="button primary js-open-lead" type="button" data-intent="Dor validada - quero clareza">
+            Quero descobrir minha margem
+          </button>
+        </div>
+      </section>
+
+      <section class="section product-section" id="produto" aria-labelledby="product-title">
+        <div class="section-heading compact">
+          <p class="eyebrow">Como o Custo Certo ajuda</p>
+          <h2 id="product-title">Da operação ao preço recomendado.</h2>
+          <p>
+            Você cadastra a base uma vez e passa a enxergar o efeito financeiro de cada serviço,
+            procedimento, material, profissional e despesa.
+          </p>
+        </div>
+        <div class="flow-grid">
+          <article>
+            <span class="step">01</span>
+            <h3>Cadastre a base</h3>
+            <p>Profissionais, materiais, serviços, tempo médio e despesas entram na conta.</p>
+          </article>
+          <article>
+            <span class="step">02</span>
+            <h3>Entenda o custo real</h3>
+            <p>O app separa custo profissional, materiais, despesas alocadas e impostos.</p>
+          </article>
+          <article>
+            <span class="step">03</span>
+            <h3>Simule o preço</h3>
+            <p>Veja preço sugerido, preço manual, margem esperada e lucro antes de decidir.</p>
+          </article>
+          <article>
+            <span class="step">04</span>
+            <h3>Acompanhe o mês</h3>
+            <p>Relatórios mostram receita, custo total, rentabilidade e ponto de equilíbrio.</p>
+          </article>
+        </div>
+        <div class="section-cta">
+          <button class="button primary js-open-lead" type="button" data-intent="Produto - demonstracao">
+            Solicitar demonstração
+          </button>
+          <a class="button secondary" href="#diagnostico">Testar simulação</a>
+        </div>
+      </section>
+
+      <section class="section demo-section" aria-labelledby="demo-title">
+        <div class="demo-copy">
+          <p class="eyebrow">Decisão visual</p>
+          <h2 id="demo-title">Antes de mudar o preço, veja o que acontece com a margem.</h2>
+          <p>
+            O Custo Certo coloca o número certo na tela certa: custo total, composição de custos,
+            preço sugerido, margem por serviço e indicadores mensais para acompanhar a evolução.
+          </p>
+        </div>
+        <div class="screen-row" aria-label="Telas do aplicativo Custo Certo">
+          <figure>
+            <img src="assets/app-simulacao.png" alt="Tela de simulação de composição de custos" />
+            <figcaption>Composição de custos</figcaption>
+          </figure>
+          <figure>
+            <img src="assets/app-relatorios.png" alt="Tela de relatórios financeiros" />
+            <figcaption>Relatórios e filtros</figcaption>
+          </figure>
+          <figure>
+            <img src="assets/app-dashboard.png" alt="Dashboard com indicadores financeiros" />
+            <figcaption>Dashboard mensal</figcaption>
+          </figure>
+        </div>
+      </section>
+
+      <section class="section pitch-section" id="assinatura" aria-labelledby="subscription-title">
+        <div class="pitch-card">
+          <p class="eyebrow">Por que assinar</p>
+          <h2 id="subscription-title">Preço, margem e convênio não precisam ser decididos no feeling.</h2>
+          <p>
+            Com a assinatura do Custo Certo, sua clínica deixa de depender de planilhas soltas e
+            passa a ter uma visão contínua de custos, rentabilidade e cenários. Você acompanha se o
+            preço atual cobre a operação, identifica serviços com margem apertada e simula ajustes
+            antes de aplicar qualquer mudança na rotina.
+          </p>
+          <div class="pitch-tags" aria-label="Benefícios da assinatura">
+            <span>Preço sugerido</span>
+            <span>Margem por serviço</span>
+            <span>Ponto de equilíbrio</span>
+            <span>Simulação de cenários</span>
+            <span>Relatórios mensais</span>
+          </div>
+        </div>
+      </section>
+
+      <section class="section calculator-section" id="diagnostico" aria-labelledby="calc-title">
+        <div class="section-heading compact">
+          <p class="eyebrow">Prévia do diagnóstico financeiro</p>
+          <h2 id="calc-title">Veja rapidamente se o preço atual conversa com seus custos.</h2>
+          <p>
+            Preencha estimativas da sua operação. O resultado abaixo é uma simulação simplificada;
+            o diagnóstico completo no Custo Certo detalha custos por profissional, materiais,
+            serviços, procedimentos e cenários de margem.
+          </p>
+        </div>
+        <div class="diagnostic-panel">
+          <form class="diagnostic-form" aria-label="Simulação financeira simplificada">
+            <label>
+              Preço médio cobrado
+              <input id="averagePrice" type="number" min="0" value="180" />
+            </label>
+            <label>
+              Atendimentos por mês
+              <input id="appointments" type="number" min="1" value="180" />
+            </label>
+            <label>
+              Custos fixos mensais
+              <input id="fixedCost" type="number" min="0" value="18500" />
+            </label>
+            <label>
+              Custo variável por atendimento
+              <input id="variableCost" type="number" min="0" value="22" />
+            </label>
+            <label>
+              Impostos e taxas (%)
+              <input id="taxRate" type="number" min="0" max="80" value="8" />
+            </label>
+            <label>
+              Repasse profissional (%)
+              <input id="professionalShare" type="number" min="0" max="80" value="10" />
+            </label>
+            <label>
+              Margem desejada (%)
+              <input id="targetMargin" type="number" min="1" max="90" value="35" />
+            </label>
+            <label>
+              Queda de tabela para simular (%)
+              <input id="tableDrop" type="number" min="0" max="80" value="15" />
+            </label>
+          </form>
+
+          <div class="diagnostic-results" aria-live="polite">
+            <div class="diagnostic-status" id="diagnosticStatus">
+              <span id="statusLabel">Margem estimada</span>
+              <strong id="estimatedMargin">0%</strong>
+              <p id="statusText"></p>
+            </div>
+
+            <div class="result-grid">
+              <output>
+                <span>Receita mensal estimada</span>
+                <strong id="grossRevenue">R$ 0,00</strong>
+              </output>
+              <output>
+                <span>Custo total mensal</span>
+                <strong id="totalCost">R$ 0,00</strong>
+              </output>
+              <output>
+                <span>Lucro estimado</span>
+                <strong id="estimatedProfit">R$ 0,00</strong>
+              </output>
+              <output>
+                <span>Custo real por atendimento</span>
+                <strong id="costPerVisit">R$ 0,00</strong>
+              </output>
+              <output>
+                <span>Preço seguro para a margem</span>
+                <strong id="suggestedPrice">R$ 0,00</strong>
+              </output>
+              <output>
+                <span>Ponto de equilíbrio</span>
+                <strong id="breakEvenVisits">0 atendimentos</strong>
+              </output>
+            </div>
+
+            <div class="scenario-card">
+              <span>Simulação de queda de tabela</span>
+              <strong id="discountImpact">R$ 0,00</strong>
+              <p id="scenarioText"></p>
+            </div>
+
+            <button class="button primary diagnostic-cta js-open-lead" type="button" data-intent="Diagnostico - acompanhar todo mes">
+              Quero acompanhar isso todo mês
+            </button>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <div class="modal" id="leadModal" aria-hidden="true">
+      <div class="modal-backdrop" data-close-modal></div>
+      <section class="modal-dialog" role="dialog" aria-modal="true" aria-labelledby="lead-title">
+        <button class="modal-close" type="button" aria-label="Fechar" data-close-modal>×</button>
+        <p class="eyebrow">Diagnóstico completo</p>
+        <h2 id="lead-title">Receba uma prévia do Custo Certo para a sua clínica.</h2>
+        <p>
+          Informe seus dados para acessar a página de oferta e entender como acompanhar custo,
+          margem, preço sugerido e ponto de equilíbrio todo mês.
+        </p>
+        <form id="leadForm" class="lead-form">
+          <label>
+            Nome
+            <input id="leadName" name="name" autocomplete="name" required placeholder="Seu nome" />
+          </label>
+          <label>
+            E-mail
+            <input id="leadEmail" name="email" type="email" autocomplete="email" required placeholder="voce@clinica.com" />
+          </label>
+          <label>
+            Telefone ou WhatsApp
+            <input id="leadPhone" name="phone" type="tel" autocomplete="tel" required placeholder="(11) 99999-9999" />
+          </label>
+          <input id="leadIntent" name="intent" type="hidden" />
+          <button class="button primary" type="submit">Continuar para a oferta</button>
+        </form>
+        <small>
+          Protótipo local: os dados ficam salvos apenas neste navegador até a integração com uma
+          ferramenta de captura.
+        </small>
+      </section>
+    </div>
+
+    <footer class="site-footer">
+      <span>Custo Certo</span>
+      <span>Decisões financeiras claras para profissionais e clínicas de saúde.</span>
+    </footer>
+
+    <script src="script.js"></script>
+  </body>
+</html>
