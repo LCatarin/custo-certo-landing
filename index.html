@@ -12,17 +12,17 @@
   </head>
   <body>
     <header class="site-header" aria-label="Topo">
-      <a class="brand" href="#inicio" aria-label="Custo Certo">
+      <a class="brand" href="#landing" aria-label="Custo Certo">
         <img class="brand-logo" src="assets/custo-certo-logo.png" alt="" />
         <span>
           <strong>Custo Certo</strong>
           <small>Margem clara para clínicas</small>
         </span>
       </a>
-      <nav class="nav-links" aria-label="Navegação principal">
-        <a href="#problema">Desafio</a>
-        <a href="#produto">Como funciona</a>
-        <a href="#diagnostico">Diagnóstico</a>
+      <nav class="top-tabs" aria-label="Navegação principal">
+        <a class="top-tab is-active" href="#landing" data-tab-target="landing" aria-current="page">Landing</a>
+        <a class="top-tab" href="#pitch-investidores" data-tab-target="pitch-investidores">Pitch investidores</a>
+        <a class="top-tab" href="#quem-somos" data-tab-target="quem-somos">Quem somos</a>
       </nav>
       <button class="header-cta js-open-lead" type="button" data-intent="Topo - simular margem">
         Simular agora
@@ -30,6 +30,7 @@
     </header>
 
     <main id="inicio">
+      <section class="tab-panel is-active" id="landing" data-tab-panel="landing">
       <section class="hero" aria-labelledby="hero-title">
         <div class="hero-media" aria-hidden="true">
           <img class="hero-phone hero-phone-main" src="assets/app-simulacao.png" alt="" />
@@ -286,6 +287,23 @@
           </div>
         </div>
       </section>
+      </section>
+
+      <section
+        class="tab-panel blank-tab-panel"
+        id="pitch-investidores"
+        data-tab-panel="pitch-investidores"
+        aria-label="Pitch de vendas para investidores"
+        hidden
+      ></section>
+
+      <section
+        class="tab-panel blank-tab-panel"
+        id="quem-somos"
+        data-tab-panel="quem-somos"
+        aria-label="Quem somos"
+        hidden
+      ></section>
     </main>
 
     <div class="modal" id="leadModal" aria-hidden="true">
@@ -329,9 +347,9 @@
         </span>
       </div>
       <nav class="footer-links" aria-label="Navegação do rodapé">
-        <a href="#problema">Desafio</a>
-        <a href="#produto">Como funciona</a>
-        <a href="#diagnostico">Diagnóstico</a>
+        <a href="#landing" data-tab-target="landing">Landing</a>
+        <a href="#pitch-investidores" data-tab-target="pitch-investidores">Pitch investidores</a>
+        <a href="#quem-somos" data-tab-target="quem-somos">Quem somos</a>
       </nav>
       <div class="footer-meta">
         <span>© 2026 Custo Certo</span>

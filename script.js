@@ -35,6 +35,10 @@ const modal = document.querySelector("#leadModal");
 const leadForm = document.querySelector("#leadForm");
 const leadIntent = document.querySelector("#leadIntent");
 const leadGreeting = document.querySelector("#leadGreeting");
+const tabPanels = document.querySelectorAll("[data-tab-panel]");
+const tabTriggers = document.querySelectorAll("[data-tab-target]");
+const topTabs = document.querySelectorAll(".top-tab[data-tab-target]");
+const tabIds = new Set([...tabPanels].map((panel) => panel.dataset.tabPanel));
 
 function numberFrom(input, fallback = 0) {
   return Number(input.value) || fallback;
@@ -42,6 +46,58 @@ function numberFrom(input, fallback = 0) {
 
 function clamp(value, min, max) {
   return Math.min(Math.max(value, min), max);
+}
+
+function activateTab(tabId, { updateHash = true, scrollToTop = true } = {}) {
+  if (!tabIds.has(tabId)) return false;
+
+  tabPanels.forEach((panel) => {
+    const isActive = panel.dataset.tabPanel === tabId;
+    panel.classList.toggle("is-active", isActive);
+    panel.hidden = !isActive;
+  });
+
+  topTabs.forEach((tab) => {
+    const isActive = tab.dataset.tabTarget === tabId;
+    tab.classList.toggle("is-active", isActive);
+    if (isActive) {
+      tab.setAttribute("aria-current", "page");
+    } else {
+      tab.removeAttribute("aria-current");
+    }
+  });
+
+  if (updateHash) {
+    history.pushState(null, "", `#${tabId}`);
+  }
+
+  if (scrollToTop) {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }
+
+  return true;
+}
+
+function syncTabFromHash() {
+  if (!tabPanels.length) return;
+
+  const hash = decodeURIComponent(window.location.hash.replace("#", ""));
+
+  if (tabIds.has(hash)) {
+    activateTab(hash, { updateHash: false, scrollToTop: false });
+    if (hash !== "landing") {
+      window.scrollTo({ top: 0 });
+    }
+    return;
+  }
+
+  activateTab("landing", { updateHash: false, scrollToTop: false });
+
+  if (hash) {
+    window.setTimeout(() => {
+      document.getElementById(hash)?.scrollIntoView({ block: "start" });
+    }, 0);
+  }
 }
 
 function updateDiagnostic() {
@@ -125,6 +181,17 @@ Object.values(fields)
   .filter((field) => field instanceof HTMLInputElement)
   .forEach((field) => field.addEventListener("input", updateDiagnostic));
 
+tabTriggers.forEach((trigger) => {
+  trigger.addEventListener("click", (event) => {
+    const tabId = trigger.dataset.tabTarget;
+    if (!tabId || !tabIds.has(tabId)) return;
+    event.preventDefault();
+    activateTab(tabId);
+  });
+});
+
+window.addEventListener("hashchange", syncTabFromHash);
+
 function openLeadModal(intent = "Conversão") {
   if (!modal) return;
   leadIntent.value = intent;
@@ -175,6 +242,8 @@ if (leadGreeting) {
     leadGreeting.textContent = "Vamos começar?";
   }
 }
+
+syncTabFromHash();
 
 if (fields.averagePrice) {
   updateDiagnostic();
