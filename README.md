@@ -1,6 +1,6 @@
-# Custo Certo Plus - Landing Page
+# Custo Certo - Landing Page
 
-Landing page de pitch e captura de leads para o Custo Certo Plus, uma ferramenta mobile-first para ajudar profissionais e clinicas de saude a entender custo por atendimento, margem, ponto de equilibrio e impacto de descontos/tabelas.
+Landing page de pitch e captura de leads para o Custo Certo, uma ferramenta mobile-first para ajudar profissionais e clinicas de saude a entender custo por atendimento, margem, ponto de equilibrio e impacto de descontos/tabelas.
 
 ## Arquivos principais
 
