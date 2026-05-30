@@ -219,10 +219,6 @@
               Lucro desejável (R$)
               <input id="desiredProfit" type="number" min="0" value="10000" />
             </label>
-            <label>
-              Reajuste de preço (%)
-              <input id="priceAdjustment" type="number" min="-80" max="200" value="10" />
-            </label>
             <p class="diagnostic-note">
               O custo variável representa gastos que nascem a cada atendimento. O custo total médio
               também considera o rateio dos custos fixos, impostos e repasses.
@@ -263,8 +259,23 @@
               </output>
             </div>
 
+            <div class="scenario-control" aria-label="Simulação de reajuste posterior ao diagnóstico">
+              <div>
+                <span>Cenário posterior ao diagnóstico</span>
+                <strong>Simule uma decisão de reajuste</strong>
+                <p>
+                  Depois de entender a margem atual, teste como uma mudança no valor médio afetaria
+                  lucro e margem mantendo o volume informado.
+                </p>
+              </div>
+              <label>
+                Reajuste de preço (%)
+                <input id="priceAdjustment" type="number" min="-80" max="200" value="10" />
+              </label>
+            </div>
+
             <div class="scenario-card">
-              <span>Cenário com reajuste de preço</span>
+              <span>Valor médio com reajuste</span>
               <strong id="adjustedPrice">R$ 0,00</strong>
               <p id="scenarioText"></p>
             </div>

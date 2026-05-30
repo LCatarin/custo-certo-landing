@@ -475,14 +475,16 @@ h2 {
   grid-template-columns: repeat(2, minmax(0, 1fr));
 }
 
-.diagnostic-form label {
+.diagnostic-form label,
+.scenario-control label {
   display: grid;
   gap: 10px;
   color: #344452;
   font-weight: 750;
 }
 
-.diagnostic-form input {
+.diagnostic-form input,
+.scenario-control input {
   width: 100%;
   min-height: 54px;
   padding: 0 16px;
@@ -567,6 +569,39 @@ h2 {
   color: #17202a;
   font-size: 1.35rem;
   line-height: 1.15;
+}
+
+.scenario-control {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(220px, 0.42fr);
+  gap: 16px;
+  align-items: end;
+  padding: 16px;
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+}
+
+.scenario-control span {
+  display: block;
+  margin-bottom: 6px;
+  color: var(--blue-700);
+  font-size: 0.82rem;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.scenario-control strong {
+  display: block;
+  color: var(--ink);
+  font-size: 1.22rem;
+  line-height: 1.2;
+}
+
+.scenario-control p {
+  margin: 8px 0 0;
+  color: var(--muted);
+  line-height: 1.45;
 }
 
 .scenario-card {
@@ -993,6 +1028,7 @@ h2 {
   .flow-grid,
   .screen-row,
   .diagnostic-form,
+  .scenario-control,
   .result-grid,
   .pricing-grid {
     grid-template-columns: 1fr;
