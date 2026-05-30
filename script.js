@@ -15,8 +15,8 @@ const fields = {
   variableCost: document.querySelector("#variableCost"),
   taxRate: document.querySelector("#taxRate"),
   professionalShare: document.querySelector("#professionalShare"),
-  targetMargin: document.querySelector("#targetMargin"),
-  tableDrop: document.querySelector("#tableDrop"),
+  desiredProfit: document.querySelector("#desiredProfit"),
+  priceAdjustment: document.querySelector("#priceAdjustment"),
   diagnosticStatus: document.querySelector("#diagnosticStatus"),
   statusLabel: document.querySelector("#statusLabel"),
   statusText: document.querySelector("#statusText"),
@@ -27,7 +27,7 @@ const fields = {
   costPerVisit: document.querySelector("#costPerVisit"),
   suggestedPrice: document.querySelector("#suggestedPrice"),
   breakEvenVisits: document.querySelector("#breakEvenVisits"),
-  discountImpact: document.querySelector("#discountImpact"),
+  adjustedPrice: document.querySelector("#adjustedPrice"),
   scenarioText: document.querySelector("#scenarioText"),
 };
 
@@ -51,8 +51,8 @@ function updateDiagnostic() {
   const variableCost = Math.max(numberFrom(fields.variableCost), 0);
   const taxRate = clamp(numberFrom(fields.taxRate), 0, 80) / 100;
   const professionalShare = clamp(numberFrom(fields.professionalShare), 0, 80) / 100;
-  const targetMargin = clamp(numberFrom(fields.targetMargin, 1), 1, 90) / 100;
-  const tableDrop = clamp(numberFrom(fields.tableDrop), 0, 80) / 100;
+  const desiredProfit = Math.max(numberFrom(fields.desiredProfit), 0);
+  const priceAdjustment = clamp(numberFrom(fields.priceAdjustment), -80, 200) / 100;
 
   const grossRevenue = averagePrice * appointments;
   const taxCost = grossRevenue * taxRate;
@@ -62,21 +62,23 @@ function updateDiagnostic() {
   const estimatedProfit = grossRevenue - totalCost;
   const estimatedMargin = grossRevenue > 0 ? estimatedProfit / grossRevenue : 0;
   const costPerVisit = totalCost / appointments;
-  const fixedCostPerVisit = fixedCost / appointments;
-  const denominator = 1 - taxRate - professionalShare - targetMargin;
-  const suggestedPrice =
-    denominator > 0 ? (fixedCostPerVisit + variableCost) / denominator : Number.NaN;
+  const priceRetention = 1 - taxRate - professionalShare;
   const contributionPerVisit = averagePrice * (1 - taxRate - professionalShare) - variableCost;
-  const breakEvenVisits =
-    contributionPerVisit > 0 ? Math.ceil(fixedCost / contributionPerVisit) : Number.POSITIVE_INFINITY;
+  const visitsForDesiredProfit =
+    contributionPerVisit > 0
+      ? Math.ceil((fixedCost + desiredProfit) / contributionPerVisit)
+      : Number.POSITIVE_INFINITY;
+  const suggestedPrice =
+    priceRetention > 0
+      ? (fixedCost + desiredProfit + totalVariableCost) / (appointments * priceRetention)
+      : Number.NaN;
 
-  const discountedPrice = averagePrice * (1 - tableDrop);
-  const discountedRevenue = discountedPrice * appointments;
-  const discountedCost =
-    fixedCost + totalVariableCost + discountedRevenue * taxRate + discountedRevenue * professionalShare;
-  const discountedProfit = discountedRevenue - discountedCost;
-  const discountImpact = discountedProfit - estimatedProfit;
-  const discountedMargin = discountedRevenue > 0 ? discountedProfit / discountedRevenue : 0;
+  const adjustedPrice = averagePrice * (1 + priceAdjustment);
+  const adjustedRevenue = adjustedPrice * appointments;
+  const adjustedCost =
+    fixedCost + totalVariableCost + adjustedRevenue * taxRate + adjustedRevenue * professionalShare;
+  const adjustedProfit = adjustedRevenue - adjustedCost;
+  const adjustedMargin = adjustedRevenue > 0 ? adjustedProfit / adjustedRevenue : 0;
 
   fields.grossRevenue.textContent = currency.format(grossRevenue);
   fields.totalCost.textContent = currency.format(totalCost);
@@ -85,11 +87,11 @@ function updateDiagnostic() {
   fields.costPerVisit.textContent = currency.format(costPerVisit);
   fields.suggestedPrice.textContent = Number.isFinite(suggestedPrice)
     ? currency.format(suggestedPrice)
-    : "Margem inviável";
-  fields.breakEvenVisits.textContent = Number.isFinite(breakEvenVisits)
-    ? `${breakEvenVisits} atendimentos`
+    : "Preço inviável";
+  fields.breakEvenVisits.textContent = Number.isFinite(visitsForDesiredProfit)
+    ? `${visitsForDesiredProfit} atendimentos`
     : "Não fecha";
-  fields.discountImpact.textContent = currency.format(discountImpact);
+  fields.adjustedPrice.textContent = currency.format(adjustedPrice);
 
   fields.diagnosticStatus.classList.remove("good", "warning", "danger");
 
@@ -98,25 +100,25 @@ function updateDiagnostic() {
     fields.statusLabel.textContent = "Resultado estimado negativo";
     fields.statusText.textContent =
       "Com estes números, a operação não cobre custos fixos, custos variáveis, impostos e repasses.";
-  } else if (estimatedMargin < targetMargin) {
-    const gap = Number.isFinite(suggestedPrice) ? Math.max(suggestedPrice - averagePrice, 0) : 0;
+  } else if (estimatedProfit < desiredProfit) {
+    const gap = Math.max(desiredProfit - estimatedProfit, 0);
     fields.diagnosticStatus.classList.add("warning");
-    fields.statusLabel.textContent = "Margem abaixo da desejada";
+    fields.statusLabel.textContent = "Lucro abaixo do desejável";
     fields.statusText.textContent =
-      gap > 0
-        ? `Para buscar a margem desejada, o preço médio precisaria subir cerca de ${currency.format(gap)} por atendimento.`
-        : "A margem desejada parece pressionada pelos percentuais de impostos, repasses e custos informados.";
+      Number.isFinite(suggestedPrice)
+        ? `Faltam ${currency.format(gap)} para o lucro desejável. Mantendo ${appointments} atendimentos, o preço médio sugerido é ${currency.format(suggestedPrice)}.`
+        : "Os percentuais de impostos e repasses deixam o preço sugerido inviável com os dados informados.";
   } else {
     fields.diagnosticStatus.classList.add("good");
-    fields.statusLabel.textContent = "Margem estimada saudável";
+    fields.statusLabel.textContent = "Lucro acima do desejável";
     fields.statusText.textContent =
-      "A margem estimada está acima da meta informada. Ainda vale acompanhar por serviço, profissional e material.";
+      "Com estes números, o lucro estimado supera o valor desejável informado. Ainda vale acompanhar por serviço, profissional e material.";
   }
 
   fields.scenarioText.textContent =
-    tableDrop > 0
-      ? `Com queda de ${percent.format(tableDrop)} no preço médio, a margem estimada iria para ${percent.format(discountedMargin)}.`
-      : "Informe uma queda de tabela para visualizar o impacto no lucro mensal estimado.";
+    priceAdjustment !== 0
+      ? `Com reajuste de ${percent.format(priceAdjustment)}, o lucro estimado iria para ${currency.format(adjustedProfit)} e a margem para ${percent.format(adjustedMargin)}.`
+      : "Informe um reajuste para visualizar o impacto no preço, lucro e margem estimada.";
 }
 
 Object.values(fields)

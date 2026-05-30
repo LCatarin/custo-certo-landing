@@ -52,30 +52,26 @@ img {
   align-items: center;
   justify-content: space-between;
   gap: 24px;
-  padding: 14px clamp(18px, 4vw, 64px);
-  background: rgba(255, 255, 255, 0.88);
+  padding: 12px clamp(18px, 4vw, 64px);
+  background: rgba(255, 255, 255, 0.94);
   border-bottom: 1px solid rgba(217, 228, 236, 0.8);
+  box-shadow: 0 10px 34px rgba(16, 43, 70, 0.08);
   backdrop-filter: blur(16px);
 }
 
 .brand {
   display: flex;
   align-items: center;
-  gap: 12px;
-  min-width: 188px;
+  gap: 13px;
+  min-width: 218px;
 }
 
-.brand-mark {
-  display: grid;
-  width: 42px;
-  height: 42px;
-  place-items: center;
-  color: #fff;
-  font-weight: 800;
-  letter-spacing: 0;
-  background: var(--blue-600);
+.brand-logo {
+  width: 48px;
+  height: 48px;
+  flex: 0 0 auto;
   border-radius: 14px;
-  box-shadow: 0 10px 24px rgba(11, 148, 220, 0.28);
+  box-shadow: 0 10px 26px rgba(11, 148, 220, 0.26);
 }
 
 .brand strong,
@@ -83,17 +79,39 @@ img {
   display: block;
 }
 
+.brand strong {
+  color: var(--ink);
+  font-size: 1.02rem;
+  line-height: 1.1;
+}
+
 .brand small {
   color: var(--muted);
   font-size: 0.76rem;
+  line-height: 1.25;
 }
 
 .nav-links {
   display: flex;
   align-items: center;
   gap: clamp(16px, 3vw, 34px);
+  padding: 10px 16px;
   color: #314152;
   font-size: 0.95rem;
+  background: rgba(245, 248, 251, 0.82);
+  border: 1px solid rgba(217, 228, 236, 0.84);
+  border-radius: 999px;
+}
+
+.nav-links a {
+  transition:
+    color 160ms ease,
+    transform 160ms ease;
+}
+
+.nav-links a:hover {
+  color: var(--blue-700);
+  transform: translateY(-1px);
 }
 
 .header-cta,
@@ -477,6 +495,14 @@ h2 {
   border-radius: 14px;
 }
 
+.diagnostic-note {
+  grid-column: 1 / -1;
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.92rem;
+  line-height: 1.45;
+}
+
 .diagnostic-status {
   display: grid;
   gap: 8px;
@@ -566,16 +592,68 @@ h2 {
 }
 
 .site-footer {
-  display: flex;
-  justify-content: space-between;
-  gap: 18px;
-  padding: 28px clamp(20px, 6vw, 92px);
+  display: grid;
+  grid-template-columns: minmax(240px, 1.2fr) minmax(220px, auto) minmax(260px, 1fr);
+  gap: 28px;
+  align-items: center;
+  padding: 34px clamp(20px, 6vw, 92px);
   color: var(--muted);
   background: #fff;
   border-top: 1px solid var(--line);
 }
 
-.site-footer span:first-child {
+.footer-brand {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  min-width: 0;
+}
+
+.footer-logo {
+  width: 54px;
+  height: 54px;
+  flex: 0 0 auto;
+  border-radius: 16px;
+  box-shadow: 0 10px 24px rgba(11, 148, 220, 0.2);
+}
+
+.footer-brand strong,
+.footer-brand small,
+.footer-meta span {
+  display: block;
+}
+
+.footer-brand strong {
+  color: var(--ink);
+  font-weight: 800;
+}
+
+.footer-brand small {
+  color: var(--muted);
+  line-height: 1.4;
+}
+
+.footer-links {
+  display: flex;
+  justify-content: center;
+  gap: 18px;
+  color: #314152;
+  font-weight: 700;
+}
+
+.footer-links a:hover {
+  color: var(--blue-700);
+}
+
+.footer-meta {
+  display: grid;
+  gap: 6px;
+  justify-items: end;
+  text-align: right;
+  line-height: 1.4;
+}
+
+.footer-meta span:first-child {
   color: var(--ink);
   font-weight: 800;
 }
@@ -626,15 +704,16 @@ h2 {
 
 .pricing-grid {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 16px;
 }
 
 .price-card {
   display: grid;
+  grid-template-rows: auto auto auto auto 1fr auto;
   gap: 16px;
   align-content: start;
-  padding: 26px;
+  padding: 24px;
   background: #fff;
   border: 1px solid var(--line);
   border-radius: 18px;
@@ -663,13 +742,20 @@ h2 {
 
 .price-card strong {
   color: var(--ink);
-  font-size: 2.2rem;
+  font-size: clamp(1.75rem, 2.1vw, 2.2rem);
   line-height: 1;
 }
 
 .price-card p {
   color: var(--muted);
   line-height: 1.55;
+}
+
+.plan-focus {
+  display: block;
+  margin-bottom: 6px;
+  color: var(--ink);
+  font-weight: 850;
 }
 
 .price-card ul {
@@ -679,6 +765,11 @@ h2 {
   padding-left: 18px;
   color: #3e4c59;
   line-height: 1.45;
+}
+
+.price-card .plan-included {
+  color: var(--blue-700);
+  font-weight: 850;
 }
 
 .modal {
@@ -917,6 +1008,18 @@ h2 {
   }
 
   .site-footer {
-    display: grid;
+    grid-template-columns: 1fr;
+    justify-items: start;
+    text-align: left;
+  }
+
+  .footer-links {
+    flex-wrap: wrap;
+    justify-content: flex-start;
+  }
+
+  .footer-meta {
+    justify-items: start;
+    text-align: left;
   }
 }
