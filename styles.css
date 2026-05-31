@@ -334,6 +334,184 @@ h1 {
   background: var(--mist);
 }
 
+.about-section {
+  background: #f6fbff;
+}
+
+.about-hero {
+  position: relative;
+  min-height: min(980px, calc(100vh - 16px));
+  overflow: hidden;
+  isolation: isolate;
+  background: #dfeef6;
+}
+
+.about-photo {
+  position: absolute;
+  inset: 0;
+  z-index: -2;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+}
+
+.about-photo-layer {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background:
+    linear-gradient(180deg, rgba(246, 251, 255, 0.72), rgba(246, 251, 255, 0.12) 42%, rgba(16, 43, 70, 0.22)),
+    linear-gradient(90deg, rgba(246, 251, 255, 0.9), rgba(246, 251, 255, 0.3) 48%, rgba(246, 251, 255, 0.58));
+}
+
+.about-float {
+  background: rgba(255, 255, 255, 0.88);
+  border: 1px solid rgba(217, 228, 236, 0.86);
+  border-radius: 18px;
+  box-shadow: 0 22px 70px rgba(16, 43, 70, 0.16);
+  backdrop-filter: blur(16px);
+}
+
+.about-title {
+  position: absolute;
+  top: 112px;
+  left: clamp(20px, 5vw, 72px);
+  width: min(610px, calc(100vw - 40px));
+  padding: clamp(24px, 4vw, 42px);
+}
+
+.about-title h1 {
+  max-width: 540px;
+  margin-bottom: 16px;
+  font-size: clamp(2.15rem, 3.5vw, 3.6rem);
+}
+
+.about-title p:last-child {
+  margin: 0;
+  color: #394958;
+  font-size: 1.08rem;
+  line-height: 1.6;
+}
+
+.about-card {
+  position: absolute;
+  width: min(410px, calc(100vw - 40px));
+  padding: 22px;
+  transition:
+    transform 180ms ease,
+    box-shadow 180ms ease,
+    background 180ms ease;
+}
+
+.about-card:hover,
+.about-card:focus {
+  outline: 0;
+  transform: translateY(-5px);
+  background: rgba(255, 255, 255, 0.96);
+  box-shadow: 0 28px 84px rgba(16, 43, 70, 0.22);
+}
+
+.about-card span,
+.about-team-note span {
+  display: block;
+  margin-bottom: 10px;
+  color: var(--blue-700);
+  font-size: 0.78rem;
+  font-weight: 850;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.about-card h2 {
+  margin-bottom: 10px;
+  font-size: 1.45rem;
+  line-height: 1.12;
+}
+
+.about-card p {
+  margin: 0;
+  color: #3e4c59;
+  line-height: 1.55;
+}
+
+.about-card-lucas {
+  left: clamp(20px, 4vw, 68px);
+  bottom: 42px;
+}
+
+.about-card-health {
+  right: clamp(20px, 4vw, 68px);
+  top: 118px;
+}
+
+.about-card-lab {
+  left: clamp(520px, 39vw, 780px);
+  top: 455px;
+}
+
+.about-build {
+  padding: clamp(64px, 9vw, 112px) clamp(20px, 6vw, 92px);
+  background: #fff;
+}
+
+.about-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.about-grid article {
+  min-height: 244px;
+  padding: 24px;
+  background: #f8fbfd;
+  border: 1px solid var(--line);
+  border-radius: 16px;
+}
+
+.about-grid span {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  margin-bottom: 18px;
+  color: var(--blue-700);
+  font-weight: 850;
+  background: var(--blue-100);
+  border-radius: 14px;
+}
+
+.about-grid h3 {
+  margin-bottom: 10px;
+  font-size: 1.22rem;
+}
+
+.about-grid p {
+  margin: 0;
+  color: var(--muted);
+  line-height: 1.55;
+}
+
+.about-team-note {
+  display: grid;
+  grid-template-columns: minmax(160px, 0.26fr) minmax(0, 1fr);
+  gap: 18px;
+  align-items: start;
+  margin-top: 18px;
+  padding: 24px;
+  background: #eaf6ff;
+  border: 1px solid #c7e8fa;
+  border-radius: 16px;
+}
+
+.about-team-note p {
+  margin: 0;
+  color: #314152;
+  font-size: 1.05rem;
+  line-height: 1.6;
+}
+
 .section {
   padding: clamp(64px, 9vw, 116px) clamp(20px, 6vw, 92px);
   scroll-margin-top: 96px;
@@ -1014,6 +1192,45 @@ h2 {
   .demo-section {
     grid-template-columns: 1fr;
   }
+
+  .about-hero {
+    display: grid;
+    gap: 14px;
+    min-height: auto;
+    padding: 110px 20px 28px;
+    background: #f6fbff;
+  }
+
+  .about-photo {
+    position: relative;
+    z-index: 0;
+    height: 430px;
+    border-radius: 18px;
+    object-position: center;
+  }
+
+  .about-photo-layer {
+    display: none;
+  }
+
+  .about-title,
+  .about-card {
+    position: relative;
+    inset: auto;
+    width: 100%;
+  }
+
+  .about-title {
+    order: -1;
+  }
+
+  .about-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .about-team-note {
+    grid-template-columns: 1fr;
+  }
 }
 
 @media (max-width: 720px) {
@@ -1047,6 +1264,33 @@ h2 {
   .blank-tab-panel {
     min-height: calc(100vh - 116px);
     padding: 58px 20px;
+  }
+
+  .about-hero {
+    padding: 40px 20px 24px;
+  }
+
+  .about-photo {
+    height: 260px;
+    object-fit: contain;
+    background: #e8eef5;
+  }
+
+  .about-title,
+  .about-card {
+    max-width: 100%;
+  }
+
+  .about-title {
+    padding: 22px;
+  }
+
+  .about-title h1 {
+    font-size: clamp(2rem, 10vw, 3rem);
+  }
+
+  .about-card {
+    padding: 20px;
   }
 
   h1 {
@@ -1104,6 +1348,7 @@ h2 {
   .stat-grid,
   .flow-grid,
   .screen-row,
+  .about-grid,
   .diagnostic-form,
   .scenario-control,
   .result-grid,
