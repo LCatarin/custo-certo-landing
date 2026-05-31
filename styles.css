@@ -480,6 +480,16 @@ h1 {
   border-top: 1px solid #d4e2ec;
 }
 
+.about-story-body span {
+  grid-column: 1;
+  grid-row: 1 / span 2;
+}
+
+.about-story-body h3,
+.about-story-body p {
+  grid-column: 2;
+}
+
 .about-story-body article:last-child {
   border-bottom: 1px solid #d4e2ec;
 }
@@ -1328,6 +1338,12 @@ h2 {
   .about-story-body article {
     grid-template-columns: 1fr;
     gap: 2px;
+  }
+
+  .about-story-body span,
+  .about-story-body h3,
+  .about-story-body p {
+    grid-column: 1;
   }
 
   .about-intro h1,
