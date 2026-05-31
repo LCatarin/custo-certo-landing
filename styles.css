@@ -343,35 +343,18 @@ h1 {
 
 .about-endorsement {
   position: relative;
-  height: clamp(86px, 8vw, 118px);
-  overflow: hidden;
+  display: grid;
+  height: clamp(72px, 6vw, 88px);
+  place-items: center;
   padding: 0;
-  background: #f6fbff;
-}
-
-.about-endorsement::after {
-  position: absolute;
-  inset: 0;
-  content: "";
-  background: rgba(2, 38, 82, 0.68);
-}
-
-.about-endorsement-photo {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  object-position: center 42%;
+  background: #ffffff;
+  border-top: 1px solid #d9e4ec;
+  border-bottom: 1px solid #d9e4ec;
 }
 
 .about-endorsement-logo {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  z-index: 1;
-  width: clamp(160px, 18vw, 250px);
+  width: clamp(150px, 16vw, 220px);
   height: auto;
-  transform: translate(-50%, -50%);
-  filter: brightness(0) invert(1) drop-shadow(0 8px 16px rgba(0, 16, 38, 0.22));
 }
 
 .about-intro {
@@ -1347,15 +1330,11 @@ h2 {
   }
 
   .about-endorsement {
-    padding: 0;
-  }
-
-  .about-endorsement {
-    height: 76px;
+    height: 68px;
   }
 
   .about-endorsement-logo {
-    width: 118px;
+    width: 132px;
   }
 
   .about-intro h1 {
