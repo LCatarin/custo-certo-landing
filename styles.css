@@ -389,7 +389,7 @@ h1 {
 }
 
 .about-principles article {
-  min-height: 310px;
+  min-height: 390px;
   padding: clamp(24px, 3vw, 38px);
   background: #fff;
 }
