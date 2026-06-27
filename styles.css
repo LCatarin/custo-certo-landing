@@ -1841,6 +1841,10 @@ h2 {
   font-weight: 850;
 }
 
+.price-card .button {
+  width: 100%;
+}
+
 .modal {
   position: fixed;
   inset: 0;
