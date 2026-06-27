@@ -297,108 +297,252 @@
         aria-label="Demo do Custo Certo"
         hidden
       >
-        <section class="demo-app-hero" aria-labelledby="demo-tab-title">
-          <div class="demo-app-copy">
-            <p class="eyebrow">Demo</p>
-            <h1 id="demo-tab-title">Veja o Custo Certo funcionando na rotina da clínica.</h1>
-            <p>
-              A experiência abaixo simula o fluxo pensado para o aplicativo: calcular o custo de um
-              serviço, registrar atendimentos, acompanhar margem e identificar quais insumos mais
-              pressionam o resultado.
-            </p>
-            <div class="demo-app-actions" aria-label="Telas da demo">
-              <button class="demo-view-button is-active" type="button" data-demo-view="simulacao">
-                Simulação
-              </button>
-              <button class="demo-view-button" type="button" data-demo-view="relatorios">
-                Relatórios
-              </button>
-              <button class="demo-view-button" type="button" data-demo-view="dashboard">
-                Dashboard
-              </button>
-            </div>
-          </div>
-
-          <div class="demo-phone" aria-label="Prévia visual do aplicativo">
-            <div class="demo-phone-status">
-              <span id="demoScreenLabel">Simulação</span>
-              <span>Custo Certo</span>
-            </div>
-            <img
-              id="demoScreenImage"
-              src="assets/app-simulacao.png"
-              alt="Tela de simulação do aplicativo Custo Certo"
-            />
-            <p id="demoScreenCaption">
-              Composição de custos por serviço, profissional, materiais, despesas e impostos.
-            </p>
-          </div>
-        </section>
-
-        <section class="demo-workbench" aria-labelledby="demo-workbench-title">
-          <div class="section-heading compact">
-            <p class="eyebrow">Fluxo da operação</p>
-            <h2 id="demo-workbench-title">Do serviço registrado ao impacto financeiro.</h2>
-            <p>
-              Ajuste o cenário para visualizar como preço, volume e variação de insumos mudam custo,
-              lucro e margem no mês.
-            </p>
-          </div>
-
-          <div class="demo-live-panel">
-            <form class="demo-live-controls" aria-label="Controles da demo">
-              <label>
-                Serviço ou procedimento
-                <select id="demoService">
-                  <option value="consulta">Consulta médica particular</option>
-                  <option value="fisio">Sessão de fisioterapia</option>
-                  <option value="vet">Procedimento veterinário</option>
-                </select>
-              </label>
-              <label>
-                Atendimentos no mês
-                <input id="demoVolume" type="number" min="1" max="600" value="120" />
-              </label>
-              <label>
-                Variação dos insumos (%)
-                <input id="demoSupplyVariation" type="range" min="-10" max="35" value="12" />
-              </label>
-              <button id="demoRegisterVisit" class="button primary" type="button">
-                Registrar atendimento
-              </button>
-              <p id="demoRegisterFeedback" class="demo-feedback" aria-live="polite">
-                Registro pronto para alimentar os indicadores do mês.
+        <section class="demo-product" aria-labelledby="demo-product-title">
+          <div class="demo-product-header">
+            <div class="demo-product-copy">
+              <p class="eyebrow">Demo operacional</p>
+              <h1 id="demo-product-title">Uma rotina completa para controlar custo, preço e margem.</h1>
+              <p>
+                Simule a operação como ela aconteceria no aplicativo: escolha o serviço, registre
+                atendimentos, acompanhe os insumos que mais pressionam o resultado e veja o relatório
+                financeiro atualizar em tempo real.
               </p>
-            </form>
-
-            <div class="demo-live-results" aria-label="Resultados da demo">
-              <article class="demo-result-card highlight">
-                <span>Margem estimada</span>
-                <strong id="demoMargin">0%</strong>
-                <p id="demoMarginText">Atualize os campos para ver a margem.</p>
-              </article>
-              <article class="demo-result-card">
-                <span>Custo por atendimento</span>
-                <strong id="demoCost">R$ 0,00</strong>
-              </article>
-              <article class="demo-result-card">
-                <span>Preço atual</span>
-                <strong id="demoPrice">R$ 0,00</strong>
-              </article>
-              <article class="demo-result-card">
-                <span>Lucro por atendimento</span>
-                <strong id="demoProfit">R$ 0,00</strong>
-              </article>
-              <article class="demo-result-card">
-                <span>Resultado estimado no mês</span>
-                <strong id="demoMonthlyProfit">R$ 0,00</strong>
-              </article>
-              <article class="demo-result-card warning">
-                <span>Ofensor de custo</span>
-                <strong id="demoOffender">Materiais</strong>
-                <p id="demoSupplyStatus">Variação de insumos monitorada.</p>
-              </article>
             </div>
+
+            <article class="demo-health-card good" id="demoHealthCard" aria-live="polite">
+              <span>Status da operação</span>
+              <strong id="demoHealthLabel">Margem saudável</strong>
+              <p id="demoHealthText">
+                O serviço cobre custos variáveis, impostos, estrutura e ainda preserva lucro.
+              </p>
+            </article>
+          </div>
+
+          <div class="demo-product-tabs" aria-label="Módulos da demo">
+            <button class="demo-module-button is-active" type="button" data-demo-module="operacao">
+              Operação
+            </button>
+            <button class="demo-module-button" type="button" data-demo-module="atendimentos">
+              Atendimentos
+            </button>
+            <button class="demo-module-button" type="button" data-demo-module="insumos">
+              Insumos
+            </button>
+            <button class="demo-module-button" type="button" data-demo-module="relatorios">
+              Relatórios
+            </button>
+          </div>
+
+          <div class="demo-system-grid">
+            <aside class="demo-control-panel" aria-label="Controles da demo">
+              <div class="demo-panel-title">
+                <span>01</span>
+                <div>
+                  <strong>Cenário do atendimento</strong>
+                  <p>Altere os dados para testar preço, volume e custo dos insumos.</p>
+                </div>
+              </div>
+
+              <form class="demo-control-form">
+                <label>
+                  Serviço ou procedimento
+                  <select id="demoProcedure">
+                    <option value="consulta">Consulta médica particular</option>
+                    <option value="fisio">Sessão de fisioterapia</option>
+                    <option value="vet">Procedimento veterinário</option>
+                  </select>
+                </label>
+
+                <label>
+                  Forma de cobrança
+                  <select id="demoChannel">
+                    <option value="particular">Particular</option>
+                    <option value="pacote">Pacote recorrente</option>
+                    <option value="convenio">Convênio ou contrato</option>
+                  </select>
+                </label>
+
+                <div class="demo-form-row">
+                  <label>
+                    Atendimentos no mês
+                    <input id="demoVolume" type="number" min="1" max="800" value="120" />
+                  </label>
+                  <label>
+                    Valor cobrado
+                    <input id="demoPriceOverride" type="number" min="0" max="5000" value="260" />
+                  </label>
+                </div>
+
+                <label>
+                  Variação de preço dos insumos
+                  <input id="demoSupplyVariation" type="range" min="-20" max="50" value="12" />
+                  <output id="demoSupplyVariationLabel">12%</output>
+                </label>
+
+                <div class="demo-actions">
+                  <button id="demoRegisterVisit" class="button primary" type="button">
+                    Registrar atendimento
+                  </button>
+                  <button id="demoResetScenario" class="button secondary" type="button">
+                    Restaurar cenário
+                  </button>
+                </div>
+
+                <p id="demoRegisterFeedback" class="demo-feedback" aria-live="polite">
+                  Cada atendimento registrado alimenta margem, relatórios e ofensores de custo.
+                </p>
+              </form>
+            </aside>
+
+            <section class="demo-app-panel" aria-label="Aplicativo Custo Certo simulado">
+              <div class="demo-app-device">
+                <div class="demo-app-topbar">
+                  <span class="demo-app-mark">CC</span>
+                  <div>
+                    <strong id="demoAppTitle">Operação</strong>
+                    <small>Custo Certo</small>
+                  </div>
+                  <span id="demoTodayBadge">18 registros hoje</span>
+                </div>
+
+                <div class="demo-app-screen">
+                  <div class="demo-screen is-active" data-demo-screen="operacao">
+                    <div class="demo-screen-heading">
+                      <span>Serviço selecionado</span>
+                      <strong id="demoServiceTitle">Consulta médica particular</strong>
+                      <p id="demoServiceMeta">Particular, 120 atendimentos no mês</p>
+                    </div>
+
+                    <div class="demo-mini-kpis">
+                      <article>
+                        <span>Receita</span>
+                        <strong id="demoMetricRevenue">R$ 0,00</strong>
+                      </article>
+                      <article>
+                        <span>Margem</span>
+                        <strong id="demoMetricMargin">0%</strong>
+                      </article>
+                    </div>
+
+                    <div class="demo-composition-card">
+                      <div class="demo-card-heading">
+                        <strong>Composição do custo</strong>
+                        <span id="demoCostPerVisit">R$ 0,00</span>
+                      </div>
+                      <div id="demoAppComposition" class="demo-composition-list"></div>
+                    </div>
+                  </div>
+
+                  <div class="demo-screen" data-demo-screen="atendimentos">
+                    <div class="demo-screen-heading">
+                      <span>Rotina de uso</span>
+                      <strong>Atendimentos registrados</strong>
+                      <p>Os lançamentos alimentam automaticamente custo, margem e relatórios.</p>
+                    </div>
+
+                    <div class="demo-visit-list" id="demoVisitList"></div>
+                  </div>
+
+                  <div class="demo-screen" data-demo-screen="insumos">
+                    <div class="demo-screen-heading">
+                      <span>Compras e fornecedores</span>
+                      <strong>Ofensores de custo</strong>
+                      <p id="demoSupplyStatus">Variação de insumos monitorada.</p>
+                    </div>
+
+                    <div id="demoAppSupplyList" class="demo-supply-list"></div>
+                  </div>
+
+                  <div class="demo-screen" data-demo-screen="relatorios">
+                    <div class="demo-screen-heading">
+                      <span>Fechamento mensal</span>
+                      <strong>Resultado por serviço</strong>
+                      <p>Visão executiva para decidir preço, volume e negociação de insumos.</p>
+                    </div>
+
+                    <div class="demo-report-bars" id="demoReportBars"></div>
+                  </div>
+                </div>
+
+                <div class="demo-app-nav" aria-label="Navegação do aplicativo">
+                  <button class="is-active" type="button" data-demo-module="operacao">Operação</button>
+                  <button type="button" data-demo-module="atendimentos">Atendimentos</button>
+                  <button type="button" data-demo-module="insumos">Insumos</button>
+                  <button type="button" data-demo-module="relatorios">Relatórios</button>
+                </div>
+              </div>
+            </section>
+
+            <section class="demo-insight-panel" aria-label="Indicadores financeiros da demo">
+              <div class="demo-kpi-grid">
+                <article class="demo-kpi-card primary">
+                  <span>Resultado estimado no mês</span>
+                  <strong id="demoMetricProfit">R$ 0,00</strong>
+                  <p id="demoMarginText">Margem saudável para o cenário.</p>
+                </article>
+                <article class="demo-kpi-card">
+                  <span>Custo por atendimento</span>
+                  <strong id="demoMetricCost">R$ 0,00</strong>
+                </article>
+                <article class="demo-kpi-card">
+                  <span>Ponto de equilíbrio</span>
+                  <strong id="demoMetricBreakeven">0 atendimentos</strong>
+                </article>
+                <article class="demo-kpi-card">
+                  <span>Atendimentos registrados</span>
+                  <strong id="demoMetricVisits">18</strong>
+                </article>
+              </div>
+
+              <div class="demo-split">
+                <article class="demo-board">
+                  <div class="demo-board-heading">
+                    <strong>Custo do atendimento</strong>
+                    <span>valor unitário</span>
+                  </div>
+                  <div id="demoCompositionList" class="demo-composition-list"></div>
+                </article>
+
+                <article class="demo-board">
+                  <div class="demo-board-heading">
+                    <strong>Insumos em atenção</strong>
+                    <span id="demoOffender">Materiais</span>
+                  </div>
+                  <div class="demo-table-wrap">
+                    <table class="demo-table">
+                      <thead>
+                        <tr>
+                          <th>Insumo</th>
+                          <th>Variação</th>
+                          <th>Ação sugerida</th>
+                        </tr>
+                      </thead>
+                      <tbody id="demoSupplyTable"></tbody>
+                    </table>
+                  </div>
+                </article>
+              </div>
+
+              <article class="demo-board">
+                <div class="demo-board-heading">
+                  <strong>Relatório por serviço</strong>
+                  <span>simulação mensal</span>
+                </div>
+                <div class="demo-table-wrap">
+                  <table class="demo-table">
+                    <thead>
+                      <tr>
+                        <th>Serviço</th>
+                        <th>Volume</th>
+                        <th>Receita</th>
+                        <th>Margem</th>
+                      </tr>
+                    </thead>
+                    <tbody id="demoReportTableBody"></tbody>
+                  </table>
+                </div>
+              </article>
+            </section>
           </div>
         </section>
       </section>

@@ -40,72 +40,117 @@ const tabTriggers = document.querySelectorAll("[data-tab-target]");
 const topTabs = document.querySelectorAll(".top-tab[data-tab-target]");
 const tabIds = new Set([...tabPanels].map((panel) => panel.dataset.tabPanel));
 
-const demoScreens = {
-  simulacao: {
-    label: "Simulação",
-    image: "assets/app-simulacao.png",
-    alt: "Tela de simulação do aplicativo Custo Certo",
-    caption: "Composição de custos por serviço, profissional, materiais, despesas e impostos.",
-  },
-  relatorios: {
-    label: "Relatórios",
-    image: "assets/app-relatorios.png",
-    alt: "Tela de relatórios do aplicativo Custo Certo",
-    caption: "Filtros por período, serviço e profissional para acompanhar receita, custo e margem.",
-  },
-  dashboard: {
-    label: "Dashboard",
-    image: "assets/app-dashboard.png",
-    alt: "Dashboard mensal do aplicativo Custo Certo",
-    caption: "Indicadores do mês para comparar custo médio, margem, faturamento e despesas.",
-  },
-};
+if ("scrollRestoration" in history) {
+  history.scrollRestoration = "manual";
+}
 
-const demoServices = {
+const demoProcedures = {
   consulta: {
-    price: 260,
-    professional: 82,
-    materials: 18,
-    fixed: 54,
+    name: "Consulta médica particular",
+    shortName: "Consulta médica",
+    defaultVolume: 120,
+    basePrice: 260,
+    professionalCost: 82,
+    professionalLabel: "Tempo profissional médico",
+    fixedMonthly: 6200,
     taxRate: 0.08,
-    offender: "Materiais descartáveis",
+    materials: [
+      { name: "Luvas e descartáveis", cost: 12, trend: 0.14, supplier: "Fornecedor atual" },
+      { name: "Sistema de agenda", cost: 5, trend: 0.03, supplier: "SaaS clínico" },
+      { name: "Impressos e consentimentos", cost: 1, trend: 0.06, supplier: "Gráfica local" },
+    ],
   },
   fisio: {
-    price: 150,
-    professional: 52,
-    materials: 9,
-    fixed: 34,
+    name: "Sessão de fisioterapia",
+    shortName: "Fisioterapia",
+    defaultVolume: 180,
+    basePrice: 150,
+    professionalCost: 52,
+    professionalLabel: "Tempo profissional fisioterapeuta",
+    fixedMonthly: 5200,
     taxRate: 0.08,
-    offender: "Tempo profissional",
+    materials: [
+      { name: "Eletrodos e bandagens", cost: 6, trend: 0.18, supplier: "Distribuidor A" },
+      { name: "Cremes e descartáveis", cost: 4, trend: 0.11, supplier: "Distribuidor B" },
+      { name: "Lavanderia e higienização", cost: 3, trend: 0.07, supplier: "Serviço local" },
+    ],
   },
   vet: {
-    price: 180,
-    professional: 48,
-    materials: 32,
-    fixed: 42,
+    name: "Procedimento veterinário",
+    shortName: "Veterinário",
+    defaultVolume: 90,
+    basePrice: 180,
+    professionalCost: 48,
+    professionalLabel: "Tempo profissional veterinário",
+    fixedMonthly: 4200,
     taxRate: 0.08,
-    offender: "Insumos clínicos",
+    materials: [
+      { name: "Anestésico e medicação", cost: 22, trend: 0.22, supplier: "Fornecedor vet" },
+      { name: "Seringas e descartáveis", cost: 9, trend: 0.16, supplier: "Distribuidor A" },
+      { name: "Higienização de sala", cost: 7, trend: 0.08, supplier: "Equipe interna" },
+    ],
   },
 };
 
+const demoChannels = {
+  particular: { label: "Particular", multiplier: 1 },
+  pacote: { label: "Pacote recorrente", multiplier: 0.92 },
+  convenio: { label: "Convênio ou contrato", multiplier: 0.72 },
+};
+
+const demoModuleTitles = {
+  operacao: "Operação",
+  atendimentos: "Atendimentos",
+  insumos: "Insumos",
+  relatorios: "Relatórios",
+};
+
+const demoInitialVisits = [
+  { time: "08:20", service: "Consulta médica", amount: 260, status: "registrado" },
+  { time: "09:10", service: "Consulta médica", amount: 260, status: "registrado" },
+  { time: "10:40", service: "Retorno monitorado", amount: 160, status: "registrado" },
+  { time: "14:30", service: "Consulta médica", amount: 260, status: "registrado" },
+];
+
+let demoVisitCount = 18;
+let demoVisitLog = [...demoInitialVisits];
+
 const demoElements = {
-  screenButtons: document.querySelectorAll("[data-demo-view]"),
-  screenLabel: document.querySelector("#demoScreenLabel"),
-  screenImage: document.querySelector("#demoScreenImage"),
-  screenCaption: document.querySelector("#demoScreenCaption"),
-  service: document.querySelector("#demoService"),
+  moduleButtons: document.querySelectorAll("[data-demo-module]"),
+  moduleScreens: document.querySelectorAll("[data-demo-screen]"),
+  procedure: document.querySelector("#demoProcedure"),
+  channel: document.querySelector("#demoChannel"),
   volume: document.querySelector("#demoVolume"),
+  priceOverride: document.querySelector("#demoPriceOverride"),
   supplyVariation: document.querySelector("#demoSupplyVariation"),
+  supplyVariationLabel: document.querySelector("#demoSupplyVariationLabel"),
   registerVisit: document.querySelector("#demoRegisterVisit"),
+  resetScenario: document.querySelector("#demoResetScenario"),
   registerFeedback: document.querySelector("#demoRegisterFeedback"),
-  margin: document.querySelector("#demoMargin"),
+  appTitle: document.querySelector("#demoAppTitle"),
+  todayBadge: document.querySelector("#demoTodayBadge"),
+  healthCard: document.querySelector("#demoHealthCard"),
+  healthLabel: document.querySelector("#demoHealthLabel"),
+  healthText: document.querySelector("#demoHealthText"),
+  serviceTitle: document.querySelector("#demoServiceTitle"),
+  serviceMeta: document.querySelector("#demoServiceMeta"),
+  metricRevenue: document.querySelector("#demoMetricRevenue"),
+  metricMargin: document.querySelector("#demoMetricMargin"),
+  metricProfit: document.querySelector("#demoMetricProfit"),
+  metricCost: document.querySelector("#demoMetricCost"),
+  metricBreakeven: document.querySelector("#demoMetricBreakeven"),
+  metricVisits: document.querySelector("#demoMetricVisits"),
+  costPerVisit: document.querySelector("#demoCostPerVisit"),
   marginText: document.querySelector("#demoMarginText"),
-  cost: document.querySelector("#demoCost"),
-  price: document.querySelector("#demoPrice"),
-  profit: document.querySelector("#demoProfit"),
-  monthlyProfit: document.querySelector("#demoMonthlyProfit"),
-  offender: document.querySelector("#demoOffender"),
+  appComposition: document.querySelector("#demoAppComposition"),
+  compositionList: document.querySelector("#demoCompositionList"),
+  supplyTable: document.querySelector("#demoSupplyTable"),
   supplyStatus: document.querySelector("#demoSupplyStatus"),
+  appSupplyList: document.querySelector("#demoAppSupplyList"),
+  offender: document.querySelector("#demoOffender"),
+  visitList: document.querySelector("#demoVisitList"),
+  reportTableBody: document.querySelector("#demoReportTableBody"),
+  reportBars: document.querySelector("#demoReportBars"),
 };
 
 function numberFrom(input, fallback = 0) {
@@ -154,7 +199,10 @@ function syncTabFromHash() {
   if (tabIds.has(hash)) {
     activateTab(hash, { updateHash: false, scrollToTop: false });
     if (hash !== "landing") {
-      window.scrollTo({ top: 0 });
+      const resetScroll = () => window.scrollTo({ top: 0, left: 0, behavior: "auto" });
+      resetScroll();
+      window.requestAnimationFrame(resetScroll);
+      window.setTimeout(resetScroll, 80);
     }
     return;
   }
@@ -245,57 +293,350 @@ function updateDiagnostic() {
       : "Informe um reajuste para visualizar o impacto no preço, lucro e margem estimada.";
 }
 
-function setDemoView(view) {
-  const screen = demoScreens[view];
-  if (!screen || !demoElements.screenImage) return;
+function getDemoProcedure() {
+  return demoProcedures[demoElements.procedure?.value] || demoProcedures.consulta;
+}
 
-  demoElements.screenButtons.forEach((button) => {
-    button.classList.toggle("is-active", button.dataset.demoView === view);
+function getDemoChannel() {
+  return demoChannels[demoElements.channel?.value] || demoChannels.particular;
+}
+
+function getDemoPrice(procedure = getDemoProcedure(), channel = getDemoChannel()) {
+  const fallback = Math.round(procedure.basePrice * channel.multiplier);
+  return Math.max(Number(demoElements.priceOverride?.value) || fallback, 0);
+}
+
+function getDemoContext() {
+  const procedure = getDemoProcedure();
+  const channel = getDemoChannel();
+  const volume = Math.max(Number(demoElements.volume?.value) || procedure.defaultVolume, 1);
+  const price = getDemoPrice(procedure, channel);
+  const supplyVariation = clamp(Number(demoElements.supplyVariation?.value) || 0, -20, 50) / 100;
+  const materials = procedure.materials.map((item) => ({
+    ...item,
+    adjustedCost: item.cost * (1 + supplyVariation),
+    adjustedTrend: item.trend + supplyVariation,
+    monthlyImpact: item.cost * supplyVariation * volume,
+  }));
+  const materialsCost = materials.reduce((sum, item) => sum + item.adjustedCost, 0);
+  const taxCost = price * procedure.taxRate;
+  const variableCost = procedure.professionalCost + materialsCost + taxCost;
+  const fixedPerVisit = procedure.fixedMonthly / volume;
+  const costPerVisit = variableCost + fixedPerVisit;
+  const profitPerVisit = price - costPerVisit;
+  const revenue = price * volume;
+  const monthlyCost = costPerVisit * volume;
+  const monthlyProfit = revenue - monthlyCost;
+  const margin = price > 0 ? profitPerVisit / price : 0;
+  const contribution = price - variableCost;
+  const breakEven = contribution > 0 ? Math.ceil(procedure.fixedMonthly / contribution) : Infinity;
+  const offender = [...materials].sort((a, b) => b.monthlyImpact - a.monthlyImpact)[0] || materials[0];
+
+  return {
+    procedure,
+    channel,
+    volume,
+    price,
+    supplyVariation,
+    materials,
+    materialsCost,
+    taxCost,
+    variableCost,
+    fixedPerVisit,
+    costPerVisit,
+    profitPerVisit,
+    revenue,
+    monthlyCost,
+    monthlyProfit,
+    margin,
+    contribution,
+    breakEven,
+    offender,
+  };
+}
+
+function getMarginStatus(margin) {
+  if (margin < 0.18) {
+    return {
+      tone: "danger",
+      label: "Margem pressionada",
+      text: "O serviço está perto do limite. Revise preço, volume, repasse ou insumos antes de escalar.",
+    };
+  }
+
+  if (margin < 0.3) {
+    return {
+      tone: "warning",
+      label: "Margem em atenção",
+      text: "O serviço fecha a conta, mas exige acompanhamento recorrente para não perder resultado.",
+    };
+  }
+
+  return {
+    tone: "good",
+    label: "Margem saudável",
+    text: "O serviço cobre custos variáveis, impostos, estrutura e ainda preserva lucro.",
+  };
+}
+
+function formatSignedPercent(value) {
+  const sign = value > 0 ? "+" : "";
+  return `${sign}${percent.format(value)}`;
+}
+
+function renderComposition(container, context) {
+  if (!container) return;
+
+  const rows = [
+    {
+      label: context.procedure.professionalLabel,
+      detail: "Custo direto do profissional",
+      value: context.procedure.professionalCost,
+      color: "#0b94dc",
+    },
+    {
+      label: "Materiais e insumos",
+      detail: `${context.materials.length} itens monitorados`,
+      value: context.materialsCost,
+      color: "#f4bf2a",
+    },
+    {
+      label: "Estrutura alocada",
+      detail: "Rateio dos custos fixos pelo volume",
+      value: context.fixedPerVisit,
+      color: "#22a45a",
+    },
+    {
+      label: "Impostos",
+      detail: `${percent.format(context.procedure.taxRate)} sobre o valor cobrado`,
+      value: context.taxCost,
+      color: "#d94b54",
+    },
+  ];
+
+  container.innerHTML = rows
+    .map(
+      (row) => `
+        <div class="demo-composition-row">
+          <span class="demo-composition-dot" style="background:${row.color}"></span>
+          <div>
+            <strong>${row.label}</strong>
+            <small>${row.detail}</small>
+          </div>
+          <span>${currency.format(row.value)}</span>
+        </div>
+      `,
+    )
+    .join("");
+}
+
+function renderVisits(context) {
+  if (!demoElements.visitList) return;
+
+  demoElements.visitList.innerHTML = demoVisitLog
+    .slice(0, 5)
+    .map(
+      (visit) => `
+        <div class="demo-visit-item">
+          <div>
+            <strong>${visit.service}</strong>
+            <span>${visit.time} - ${visit.status}</span>
+          </div>
+          <strong>${currency.format(visit.amount)}</strong>
+        </div>
+      `,
+    )
+    .join("");
+
+  demoElements.todayBadge.textContent = `${demoVisitCount} registros hoje`;
+  demoElements.metricVisits.textContent = String(demoVisitCount);
+  demoElements.serviceTitle.textContent = context.procedure.name;
+}
+
+function renderSupplies(context) {
+  const rows = [...context.materials].sort((a, b) => b.adjustedTrend - a.adjustedTrend);
+  const offender = rows[0];
+  const status =
+    context.supplyVariation > 0
+      ? `${offender.name} é o principal ofensor neste cenário. Vale cotar fornecedores e revisar estoque mínimo.`
+      : "Sem pressão relevante nos insumos. Mantenha o acompanhamento para preservar margem.";
+
+  demoElements.offender.textContent = offender?.name || "Sem ofensor";
+  demoElements.supplyStatus.textContent = status;
+
+  if (demoElements.appSupplyList) {
+    demoElements.appSupplyList.innerHTML = rows
+      .map(
+        (item) => `
+          <div class="demo-supply-item">
+            <div>
+              <strong>${item.name}</strong>
+              <span>${item.supplier} - custo atual ${currency.format(item.adjustedCost)}</span>
+            </div>
+            <mark>${formatSignedPercent(item.adjustedTrend)}</mark>
+          </div>
+        `,
+      )
+      .join("");
+  }
+
+  if (demoElements.supplyTable) {
+    demoElements.supplyTable.innerHTML = rows
+      .map((item) => {
+        const action =
+          item.adjustedTrend >= 0.2
+            ? "Renegociar ou cotar substituto"
+            : item.adjustedTrend >= 0.1
+              ? "Acompanhar próxima compra"
+              : "Manter monitoramento";
+
+        return `
+          <tr>
+            <td>${item.name}</td>
+            <td class="${item.adjustedTrend >= 0.2 ? "danger" : "attention"}">${formatSignedPercent(item.adjustedTrend)}</td>
+            <td>${action}</td>
+          </tr>
+        `;
+      })
+      .join("");
+  }
+}
+
+function calculateReportRow(key, activeContext) {
+  const procedure = demoProcedures[key];
+  const channel = key === demoElements.procedure?.value ? activeContext.channel : demoChannels.particular;
+  const volume = key === demoElements.procedure?.value ? activeContext.volume : procedure.defaultVolume;
+  const price = key === demoElements.procedure?.value ? activeContext.price : procedure.basePrice;
+  const supplyVariation = activeContext.supplyVariation;
+  const materialsCost = procedure.materials.reduce(
+    (sum, item) => sum + item.cost * (1 + supplyVariation),
+    0,
+  );
+  const taxCost = price * procedure.taxRate;
+  const variableCost = procedure.professionalCost + materialsCost + taxCost;
+  const fixedPerVisit = procedure.fixedMonthly / volume;
+  const costPerVisit = variableCost + fixedPerVisit;
+  const profitPerVisit = price - costPerVisit;
+  const margin = price > 0 ? profitPerVisit / price : 0;
+  const revenue = price * volume;
+
+  return {
+    procedure,
+    volume,
+    revenue,
+    margin,
+  };
+}
+
+function renderReports(context) {
+  const rows = Object.keys(demoProcedures).map((key) => calculateReportRow(key, context));
+
+  if (demoElements.reportTableBody) {
+    demoElements.reportTableBody.innerHTML = rows
+      .map((row) => {
+        const tone = row.margin < 0.18 ? "danger" : row.margin < 0.3 ? "attention" : "positive";
+
+        return `
+          <tr>
+            <td>${row.procedure.shortName}</td>
+            <td>${row.volume}</td>
+            <td>${currency.format(row.revenue)}</td>
+            <td class="${tone}">${percent.format(row.margin)}</td>
+          </tr>
+        `;
+      })
+      .join("");
+  }
+
+  if (demoElements.reportBars) {
+    demoElements.reportBars.innerHTML = rows
+      .map((row) => {
+        const width = clamp(row.margin * 100, 4, 100);
+
+        return `
+          <div class="demo-report-item">
+            <div>
+              <strong>${row.procedure.shortName}</strong>
+              <span>${row.volume} atendimentos - ${currency.format(row.revenue)}</span>
+            </div>
+            <div class="demo-report-progress"><span style="width:${width}%"></span></div>
+            <span>Margem ${percent.format(row.margin)}</span>
+          </div>
+        `;
+      })
+      .join("");
+  }
+}
+
+function setDemoModule(module) {
+  const nextModule = demoModuleTitles[module] ? module : "operacao";
+
+  demoElements.moduleButtons.forEach((button) => {
+    button.classList.toggle("is-active", button.dataset.demoModule === nextModule);
   });
 
-  demoElements.screenLabel.textContent = screen.label;
-  demoElements.screenImage.src = screen.image;
-  demoElements.screenImage.alt = screen.alt;
-  demoElements.screenCaption.textContent = screen.caption;
+  demoElements.moduleScreens.forEach((screen) => {
+    screen.classList.toggle("is-active", screen.dataset.demoScreen === nextModule);
+  });
+
+  if (demoElements.appTitle) {
+    demoElements.appTitle.textContent = demoModuleTitles[nextModule];
+  }
+}
+
+function setDemoDefaults({ resetLog = false } = {}) {
+  if (!demoElements.procedure) return;
+
+  const procedure = getDemoProcedure();
+  const channel = getDemoChannel();
+  demoElements.volume.value = procedure.defaultVolume;
+  demoElements.priceOverride.value = Math.round(procedure.basePrice * channel.multiplier);
+
+  if (resetLog) {
+    demoVisitCount = 18;
+    demoVisitLog = [...demoInitialVisits];
+    demoElements.supplyVariation.value = 12;
+    demoElements.registerFeedback.textContent =
+      "Cenário restaurado. Ajuste os campos para testar outra operação.";
+  }
 }
 
 function updateDemo() {
-  if (!demoElements.service) return;
+  if (!demoElements.procedure) return;
 
-  const service = demoServices[demoElements.service.value] || demoServices.consulta;
-  const volume = Math.max(Number(demoElements.volume.value) || 1, 1);
-  const variation = clamp(Number(demoElements.supplyVariation.value) || 0, -10, 35) / 100;
-  const materials = service.materials * (1 + variation);
-  const tax = service.price * service.taxRate;
-  const cost = service.professional + materials + service.fixed + tax;
-  const profit = service.price - cost;
-  const margin = service.price > 0 ? profit / service.price : 0;
-  const monthlyProfit = profit * volume;
-  const marginCard = demoElements.margin?.closest(".demo-result-card");
+  const context = getDemoContext();
+  const status = getMarginStatus(context.margin);
+  const breakEvenText = Number.isFinite(context.breakEven)
+    ? `${context.breakEven} atendimentos`
+    : "Não fecha";
 
-  demoElements.margin.textContent = percent.format(margin);
-  demoElements.cost.textContent = currency.format(cost);
-  demoElements.price.textContent = currency.format(service.price);
-  demoElements.profit.textContent = currency.format(profit);
-  demoElements.monthlyProfit.textContent = currency.format(monthlyProfit);
+  demoElements.supplyVariationLabel.textContent = formatSignedPercent(context.supplyVariation);
+  demoElements.healthCard.classList.remove("good", "warning", "danger");
+  demoElements.healthCard.classList.add(status.tone);
+  demoElements.healthLabel.textContent = status.label;
+  demoElements.healthText.textContent = status.text;
+  demoElements.serviceTitle.textContent = context.procedure.name;
+  demoElements.serviceMeta.textContent =
+    `${context.channel.label}, ${context.volume} atendimentos no mês`;
+  demoElements.metricRevenue.textContent = currency.format(context.revenue);
+  demoElements.metricMargin.textContent = percent.format(context.margin);
+  demoElements.metricProfit.textContent = currency.format(context.monthlyProfit);
+  demoElements.metricCost.textContent = currency.format(context.costPerVisit);
+  demoElements.metricBreakeven.textContent = breakEvenText;
+  demoElements.costPerVisit.textContent = currency.format(context.costPerVisit);
+  demoElements.marginText.textContent = status.text;
 
-  marginCard?.classList.remove("attention", "danger");
-  if (margin < 0.2) {
-    marginCard?.classList.add("danger");
-    demoElements.marginText.textContent = "Margem pressionada. Revise preço, repasse ou insumos.";
-  } else if (margin < 0.35) {
-    marginCard?.classList.add("attention");
-    demoElements.marginText.textContent = "Margem positiva, mas exige acompanhamento de perto.";
-  } else {
-    demoElements.marginText.textContent = "Margem saudável para este cenário simulado.";
+  const profitCard = demoElements.metricProfit?.closest(".demo-kpi-card");
+  profitCard?.classList.remove("warning", "danger");
+  if (status.tone !== "good") {
+    profitCard?.classList.add(status.tone);
   }
 
-  const variationLabel = percent.format(variation);
-  demoElements.offender.textContent = variation > 0 ? service.offender : "Sem alta relevante";
-  demoElements.supplyStatus.textContent =
-    variation > 0
-      ? `${service.offender} com variação de ${variationLabel} no cenário.`
-      : `Insumos com variação de ${variationLabel}; cenário sem pressão relevante.`;
+  renderComposition(demoElements.appComposition, context);
+  renderComposition(demoElements.compositionList, context);
+  renderVisits(context);
+  renderSupplies(context);
+  renderReports(context);
 }
 
 Object.values(fields)
@@ -335,22 +676,52 @@ document.querySelectorAll("[data-close-modal]").forEach((button) => {
   button.addEventListener("click", closeLeadModal);
 });
 
-demoElements.screenButtons.forEach((button) => {
-  button.addEventListener("click", () => setDemoView(button.dataset.demoView));
+demoElements.moduleButtons.forEach((button) => {
+  button.addEventListener("click", () => setDemoModule(button.dataset.demoModule));
 });
 
-[demoElements.service, demoElements.volume, demoElements.supplyVariation]
+demoElements.procedure?.addEventListener("change", () => {
+  setDemoDefaults();
+  updateDemo();
+});
+
+demoElements.channel?.addEventListener("change", () => {
+  const procedure = getDemoProcedure();
+  const channel = getDemoChannel();
+  demoElements.priceOverride.value = Math.round(procedure.basePrice * channel.multiplier);
+  updateDemo();
+});
+
+[demoElements.volume, demoElements.priceOverride, demoElements.supplyVariation]
   .filter((field) => field instanceof HTMLElement)
   .forEach((field) => field.addEventListener("input", updateDemo));
 
-demoElements.service?.addEventListener("change", updateDemo);
-
 demoElements.registerVisit?.addEventListener("click", () => {
+  const context = getDemoContext();
   const nextVolume = Math.max(Number(demoElements.volume.value) || 0, 0) + 1;
+  const now = new Date();
+  const time = now.toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit" });
+
   demoElements.volume.value = nextVolume;
+  demoVisitCount += 1;
+  demoVisitLog = [
+    {
+      time,
+      service: context.procedure.shortName,
+      amount: context.price,
+      status: "registrado agora",
+    },
+    ...demoVisitLog,
+  ];
   demoElements.registerFeedback.textContent =
-    `Atendimento registrado. O mês agora considera ${nextVolume} atendimentos.`;
-  setDemoView("dashboard");
+    `Atendimento registrado. O mês agora considera ${nextVolume} atendimentos para este serviço.`;
+  setDemoModule("atendimentos");
+  updateDemo();
+});
+
+demoElements.resetScenario?.addEventListener("click", () => {
+  setDemoDefaults({ resetLog: true });
+  setDemoModule("operacao");
   updateDemo();
 });
 
@@ -389,6 +760,8 @@ if (fields.averagePrice) {
   updateDiagnostic();
 }
 
-if (demoElements.service) {
+if (demoElements.procedure) {
+  setDemoDefaults();
+  setDemoModule("operacao");
   updateDemo();
 }
