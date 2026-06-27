@@ -40,6 +40,74 @@ const tabTriggers = document.querySelectorAll("[data-tab-target]");
 const topTabs = document.querySelectorAll(".top-tab[data-tab-target]");
 const tabIds = new Set([...tabPanels].map((panel) => panel.dataset.tabPanel));
 
+const demoScreens = {
+  simulacao: {
+    label: "Simulação",
+    image: "assets/app-simulacao.png",
+    alt: "Tela de simulação do aplicativo Custo Certo",
+    caption: "Composição de custos por serviço, profissional, materiais, despesas e impostos.",
+  },
+  relatorios: {
+    label: "Relatórios",
+    image: "assets/app-relatorios.png",
+    alt: "Tela de relatórios do aplicativo Custo Certo",
+    caption: "Filtros por período, serviço e profissional para acompanhar receita, custo e margem.",
+  },
+  dashboard: {
+    label: "Dashboard",
+    image: "assets/app-dashboard.png",
+    alt: "Dashboard mensal do aplicativo Custo Certo",
+    caption: "Indicadores do mês para comparar custo médio, margem, faturamento e despesas.",
+  },
+};
+
+const demoServices = {
+  consulta: {
+    price: 260,
+    professional: 82,
+    materials: 18,
+    fixed: 54,
+    taxRate: 0.08,
+    offender: "Materiais descartáveis",
+  },
+  fisio: {
+    price: 150,
+    professional: 52,
+    materials: 9,
+    fixed: 34,
+    taxRate: 0.08,
+    offender: "Tempo profissional",
+  },
+  vet: {
+    price: 180,
+    professional: 48,
+    materials: 32,
+    fixed: 42,
+    taxRate: 0.08,
+    offender: "Insumos clínicos",
+  },
+};
+
+const demoElements = {
+  screenButtons: document.querySelectorAll("[data-demo-view]"),
+  screenLabel: document.querySelector("#demoScreenLabel"),
+  screenImage: document.querySelector("#demoScreenImage"),
+  screenCaption: document.querySelector("#demoScreenCaption"),
+  service: document.querySelector("#demoService"),
+  volume: document.querySelector("#demoVolume"),
+  supplyVariation: document.querySelector("#demoSupplyVariation"),
+  registerVisit: document.querySelector("#demoRegisterVisit"),
+  registerFeedback: document.querySelector("#demoRegisterFeedback"),
+  margin: document.querySelector("#demoMargin"),
+  marginText: document.querySelector("#demoMarginText"),
+  cost: document.querySelector("#demoCost"),
+  price: document.querySelector("#demoPrice"),
+  profit: document.querySelector("#demoProfit"),
+  monthlyProfit: document.querySelector("#demoMonthlyProfit"),
+  offender: document.querySelector("#demoOffender"),
+  supplyStatus: document.querySelector("#demoSupplyStatus"),
+};
+
 function numberFrom(input, fallback = 0) {
   return Number(input.value) || fallback;
 }
@@ -177,6 +245,59 @@ function updateDiagnostic() {
       : "Informe um reajuste para visualizar o impacto no preço, lucro e margem estimada.";
 }
 
+function setDemoView(view) {
+  const screen = demoScreens[view];
+  if (!screen || !demoElements.screenImage) return;
+
+  demoElements.screenButtons.forEach((button) => {
+    button.classList.toggle("is-active", button.dataset.demoView === view);
+  });
+
+  demoElements.screenLabel.textContent = screen.label;
+  demoElements.screenImage.src = screen.image;
+  demoElements.screenImage.alt = screen.alt;
+  demoElements.screenCaption.textContent = screen.caption;
+}
+
+function updateDemo() {
+  if (!demoElements.service) return;
+
+  const service = demoServices[demoElements.service.value] || demoServices.consulta;
+  const volume = Math.max(Number(demoElements.volume.value) || 1, 1);
+  const variation = clamp(Number(demoElements.supplyVariation.value) || 0, -10, 35) / 100;
+  const materials = service.materials * (1 + variation);
+  const tax = service.price * service.taxRate;
+  const cost = service.professional + materials + service.fixed + tax;
+  const profit = service.price - cost;
+  const margin = service.price > 0 ? profit / service.price : 0;
+  const monthlyProfit = profit * volume;
+  const marginCard = demoElements.margin?.closest(".demo-result-card");
+
+  demoElements.margin.textContent = percent.format(margin);
+  demoElements.cost.textContent = currency.format(cost);
+  demoElements.price.textContent = currency.format(service.price);
+  demoElements.profit.textContent = currency.format(profit);
+  demoElements.monthlyProfit.textContent = currency.format(monthlyProfit);
+
+  marginCard?.classList.remove("attention", "danger");
+  if (margin < 0.2) {
+    marginCard?.classList.add("danger");
+    demoElements.marginText.textContent = "Margem pressionada. Revise preço, repasse ou insumos.";
+  } else if (margin < 0.35) {
+    marginCard?.classList.add("attention");
+    demoElements.marginText.textContent = "Margem positiva, mas exige acompanhamento de perto.";
+  } else {
+    demoElements.marginText.textContent = "Margem saudável para este cenário simulado.";
+  }
+
+  const variationLabel = percent.format(variation);
+  demoElements.offender.textContent = variation > 0 ? service.offender : "Sem alta relevante";
+  demoElements.supplyStatus.textContent =
+    variation > 0
+      ? `${service.offender} com variação de ${variationLabel} no cenário.`
+      : `Insumos com variação de ${variationLabel}; cenário sem pressão relevante.`;
+}
+
 Object.values(fields)
   .filter((field) => field instanceof HTMLInputElement)
   .forEach((field) => field.addEventListener("input", updateDiagnostic));
@@ -214,6 +335,25 @@ document.querySelectorAll("[data-close-modal]").forEach((button) => {
   button.addEventListener("click", closeLeadModal);
 });
 
+demoElements.screenButtons.forEach((button) => {
+  button.addEventListener("click", () => setDemoView(button.dataset.demoView));
+});
+
+[demoElements.service, demoElements.volume, demoElements.supplyVariation]
+  .filter((field) => field instanceof HTMLElement)
+  .forEach((field) => field.addEventListener("input", updateDemo));
+
+demoElements.service?.addEventListener("change", updateDemo);
+
+demoElements.registerVisit?.addEventListener("click", () => {
+  const nextVolume = Math.max(Number(demoElements.volume.value) || 0, 0) + 1;
+  demoElements.volume.value = nextVolume;
+  demoElements.registerFeedback.textContent =
+    `Atendimento registrado. O mês agora considera ${nextVolume} atendimentos.`;
+  setDemoView("dashboard");
+  updateDemo();
+});
+
 document.addEventListener("keydown", (event) => {
   if (event.key === "Escape") closeLeadModal();
 });
@@ -247,4 +387,8 @@ syncTabFromHash();
 
 if (fields.averagePrice) {
   updateDiagnostic();
+}
+
+if (demoElements.service) {
+  updateDemo();
 }
